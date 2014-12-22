@@ -1,0 +1,19 @@
+---
+- hosts: all
+  roles:
+    - yum
+    - nginx
+    - role: ansible-thumbor
+      thumbor_ports: # adding more ports means more Thumbor workers --> more parallel image processing
+        - 8888
+        - 8889
+        - 8890
+        - 8891
+      thumbor_allow_unsafe_urls: True # True or False only. For more info: https://github.com/thumbor/thumbor/wiki/Security
+      thumbor_result_storage: thumbor.result_storages.file_storage # If you want to use S3 storage, make sure you set the proper AWS credential variables
+      thumbor_file_storage_path: /tmp/thumbor/storage # Would highly recommend this be a shared mounted drive if using a cluster
+      thumbor_file_result_storage_path: /tmp/thumbor/result_storage # Would highly recommend this be a shared mounted drive if using a cluster
+      thumbor_secret: 761ca67c-b67d-4beb-a77d-022caf29d2eb-4e26d230-dcca-49ad-a375-13227eb94249 # make your own
+    - role: iptables
+      iptables_input_filters:
+      - { rule: '-p tcp -m tcp --dport 80 -j ACCEPT', comment: 'HTTP'}

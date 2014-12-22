@@ -1,0 +1,41 @@
+#user  nobody;
+worker_processes  1;
+
+#error_log  /var/log/error.log debug;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#rewrite_log on;
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+http {
+# A virtual host using mix of IP-, name-, and port-based configuration
+#
+
+  upstream thumbor {
+    {% for port in thumbor_ports %}
+          server localhost:{{ port }};
+    {% endfor %}
+  }
+
+  server {
+    listen       80;
+    server_name  {{ thumbor_server_name }};
+    client_max_body_size 10M;
+    rewrite_log on;
+
+    location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header HOST $http_host;
+      proxy_set_header X-NginX-Proxy true;
+
+      proxy_pass http://thumbor;
+      proxy_redirect off;
+    }
+  }
+}

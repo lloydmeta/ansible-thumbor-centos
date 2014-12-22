@@ -1,0 +1,44 @@
+- name: setup epel repository (CentOS 6)
+  yum: name=http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/{{ ansible_distribution_version|int }}/{{ ansible_architecture }}/epel-release-6-8.noarch.rpm
+  tags: yum
+
+- name: check epel gpg pub key imported
+  shell: rpm -qi gpg-pubkey-* | grep Summary | grep -q EPEL
+  register: epel_imported
+  failed_when: epel_imported.rc not in [0, 1]
+  changed_when: False
+  tags: yum
+
+- name: import epel key (CentOS 6)
+  command: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+  when: epel_imported.rc == 1
+  tags: yum
+
+- name: disable epel
+  ini_file: >
+    dest=/etc/yum.repos.d/epel.repo
+    section="epel"
+    option="enabled"
+    value="0"
+  tags: yum
+
+- name: setup remi repo
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+  tags: yum
+
+- name: check fastestmirror.conf
+  command: test -f dest=/etc/yum/pluginconf.d/fastestmirror.conf
+  register: fastestmirror_conf_exist
+  failed_when: fastestmirror_conf_exist.rc not in [0, 1]
+  changed_when: False
+  tags: yum
+
+- name: set fastestmirror filter
+  lineinfile: >
+    dest=/etc/yum/pluginconf.d/fastestmirror.conf
+    state=present
+    regexp='^include_only'
+    line='include_only=.jp'
+    insertafter='#include_only'
+  when: ansible_distribution == 'CentOS' and ansible_distribution_version|int == 6
+  tags: yum

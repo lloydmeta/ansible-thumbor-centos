@@ -1,0 +1,117 @@
+---
+- name: create group
+  group: >
+    name={{thumbor_group}}
+    state=present
+  tags: thumbor
+
+- name: create user
+  user: >
+    name={{thumbor_user}}
+    group={{thumbor_group}}
+  tags: thumbor
+
+- name: install dependencies
+  yum: name={{item}} state=installed enablerepo=epel,remi disable_gpg_check=yes
+  with_items:
+    - gcc
+    - git
+    - python-pip
+    - python-devel
+    # begin - Thumbor is fairly useless without these
+    - libpng
+    - libjpeg
+    - libpng-devel
+    - libjpeg-devel
+    - libjasper-devel
+    - libwebp-devel
+    - ghostscript
+    - libtiff
+    - libtiff-devel
+    - freetype
+    - freetype-devel
+    # end - Thumbor is fairly useless without these
+    # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
+    # - GraphicsMagick-c++-devel
+    # - boost-devel
+  tags: thumbor
+
+- name: install pip dependencies
+  pip: >
+    name={{item}}
+  with_items:
+    - pycurl
+    - thumbor
+    - boto
+    - git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
+    # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
+    # - pgmagick
+    # - graphicsmagick-engine
+    # - numpy
+  tags: thumbor
+
+- name: copy thumbor conf default
+  template: >
+    src=thumbor.conf.j2
+    dest={{ thumbor_config_file }}
+    owner=root
+    group=root
+    mode=0755
+  tags: thumbor
+  notify: restart thumbor
+
+- name: copy thumbor upstart script
+  template: >
+    src=upstart-thumbor.conf.j2
+    dest=/etc/init/thumbor.conf
+    owner=root
+    group=root
+    mode=644
+  tags: thumbor
+
+- name: copy thumbor key
+  template: >
+    src=thumbor.key.j2
+    dest={{ thumbor_key_file }}
+    owner=root
+    group=root
+    mode=0755
+  tags: thumbor
+
+- name: working dir
+  file: >
+    path={{thumbor_working_directory}}
+    owner=root
+    group=root
+    mode=0644
+    state=directory
+  tags: thumbor
+
+- name: copy thumbor upstart script
+  template: >
+    src=upstart-thumbor.conf.j2
+    dest=/etc/init/thumbor.conf
+    owner=root
+    group=root
+    mode=644
+  tags: thumbor
+
+- name: copy thumbor worker upstart script
+  template: >
+    src=upstart-thumbor-worker.conf.j2
+    dest=/etc/init/thumbor-worker.conf
+    owner=root
+    group=root
+    mode=644
+  notify: start thumbor
+  tags: thumbor
+
+- name: copy nginx config
+  template: >
+    src=nginx-site.conf.j2
+    dest=/etc/nginx/nginx.conf
+    owner=root
+    group=root
+    mode=0755
+  notify: restart nginx
+  tags: thumbor

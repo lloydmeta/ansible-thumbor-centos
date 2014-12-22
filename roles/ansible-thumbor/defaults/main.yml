@@ -1,0 +1,24 @@
+---
+# defaults file for ansible-thumbor
+thumbor_aws_version: a0c4bcc02601af317072adab32ce0be14d0cd492
+thumbor_server_name: localhost
+thumbor_user: thumbor
+thumbor_group: thumbor
+thumbor_home: /home/thumbor
+thumbor_config_file: /etc/thumbor.conf
+thumbor_key_file: /etc/thumbor.key
+thumbor_log_file: /var/log/thumbor
+thumbor_working_directory: /var/lib/thumbor
+thumbor_default: /etc/default/thumbor
+thumbor_server_name: localhost
+thumbor_bind_address: 127.0.0.1
+thumbor_loader: thumbor.loaders.http_loader
+thumbor_storage: thumbor.storages.file_storage
+thumbor_result_storage: thumbor.result_storages.file_storage
+thumbor_max_age: 31536000
+thumbor_ports:
+  - 8888
+thumbor_file_storage_path: /tmp/thumbor/storage
+thumbor_file_result_storage_path: /tmp/thumbor/result_storage
+thumbor_secret: 761ca67c-b67d-4beb-a77d-022caf29d2eb-4e26d230-dcca-49ad-a375-13227eb94249
+thumbor_allow_unsafe_urls: True
