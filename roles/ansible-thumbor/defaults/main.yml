@@ -22,3 +22,4 @@ thumbor_file_storage_path: /tmp/thumbor/storage
 thumbor_file_result_storage_path: /tmp/thumbor/result_storage
 thumbor_secret: 761ca67c-b67d-4beb-a77d-022caf29d2eb-4e26d230-dcca-49ad-a375-13227eb94249
 thumbor_allow_unsafe_urls: True
+thumbor_cache_unsafe_results: False
