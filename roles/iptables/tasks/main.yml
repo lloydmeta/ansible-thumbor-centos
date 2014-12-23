@@ -5,7 +5,7 @@
 
 - name: configure iptables
   template: >
-    src=iptables.sysconfig.j2
+    src=iptables.j2
     dest=/etc/sysconfig/iptables
     owner=root group=root mode=0600
   notify: restart iptables

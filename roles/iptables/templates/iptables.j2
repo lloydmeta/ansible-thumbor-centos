@@ -2,8 +2,10 @@
 :INPUT DROP [0:0]
 :FORWARD DROP [0:0]
 :OUTPUT DROP [0:0]
+
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
 
 # drop DHCP request
 -A INPUT -p udp -m udp --dport 67 -j DROP
@@ -25,9 +27,5 @@
 
 # Allow all outgoing
 -A OUTPUT -j ACCEPT
-
-# Reject all other inbound - default deny unless explicitly allowed policy
--A INPUT -j REJECT
--A FORWARD -j REJECT
 
 COMMIT
