@@ -17,3 +17,4 @@ Vagrant
 -----------
 - Run `vagrant up` from the root directory. Ensure you have the latest Ansible and Vagrant installed.
 - It will likely hang at `restart iptables` but everything should be fine.
+- After everything is done, you should be able to use Thumbor by hitting `http://localhost:8080` and passing in Tumbor-ish URLs.
