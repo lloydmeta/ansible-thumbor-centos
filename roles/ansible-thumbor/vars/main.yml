@@ -2,3 +2,5 @@
 thumbor_aws_access_key: ''
 thumbor_aws_secret_key: ''
 thumbor_aws_loader_bucket: ''
+thumbor_aws_storage_bucket: ''
+thumbor_aws_result_storage_bucket: ''
