@@ -44,7 +44,7 @@
     - thumbor
     - boto
     - python-dateutil
-    #- git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
+    - git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
     # - pgmagick
     # - graphicsmagick-engine
