@@ -1,6 +1,6 @@
 ---
 # defaults file for ansible-thumbor
-thumbor_aws_version: 9397a8dba98464ac37539a78502a59dd5068c830
+thumbor_aws_version: a0c4bcc02601af317072adab32ce0be14d0cd492
 thumbor_server_name: localhost
 thumbor_user: thumbor
 thumbor_group: thumbor
