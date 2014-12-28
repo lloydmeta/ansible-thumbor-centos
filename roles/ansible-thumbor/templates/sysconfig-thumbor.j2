@@ -1,0 +1,8 @@
+port={{ thumbor_ports | join(',') }}
+conffile={{thumbor_config_file}}
+keyfile={{thumbor_key_file}}
+ip={{thumbor_bind_address}}
+
+[ -r /etc/default/thumbor ] && . /etc/default/thumbor
+
+DAEMON=/usr/bin/thumbor

@@ -44,7 +44,7 @@
     - thumbor
     - boto
     - python-dateutil
-    - git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
+    #- git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
     # - pgmagick
     # - graphicsmagick-engine
@@ -60,15 +60,6 @@
     mode=0755
   tags: thumbor
   notify: restart thumbor
-
-- name: copy thumbor upstart script
-  template: >
-    src=upstart-thumbor.conf.j2
-    dest=/etc/init/thumbor.conf
-    owner=root
-    group=root
-    mode=644
-  tags: thumbor
 
 - name: copy thumbor key
   template: >
@@ -88,19 +79,44 @@
     state=directory
   tags: thumbor
 
-- name: copy thumbor upstart script
+- name: copy thumbor service start script
   template: >
-    src=upstart-thumbor.conf.j2
-    dest=/etc/init/thumbor.conf
+    src=thumbor-service-start.j2
+    dest=/usr/bin/start-thumbor-service
+    owner=root
+    group=root
+    mode=755
+  tags: thumbor
+
+- name: sysconfig dir
+  file: >
+    path=/etc/sysconfig
+    owner=root
+    group=root
+    state=directory
+  tags: thumbor
+
+- name: log file
+  file: >
+    path=/var/log/thumbor.log
+    owner={{ thumbor_user}}
+    state=touch
+  tags: thumbor
+
+- name: copy thumbor sysconfig
+  template: >
+    src=sysconfig-thumbor.j2
+    dest=/etc/sysconfig/thumbor
     owner=root
     group=root
     mode=644
+  notify: start thumbor
   tags: thumbor
 
-- name: copy thumbor worker upstart script
+- name: copy thumbor systemd start script
   template: >
-    src=upstart-thumbor-worker.conf.j2
-    dest=/etc/init/thumbor-worker.conf
+    src=systemd-thumbor.unit.j2
+    dest=/etc/systemd/system/thumbor.service
     owner=root
     group=root
     mode=644

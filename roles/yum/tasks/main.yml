@@ -1,5 +1,5 @@
-- name: setup epel repository (CentOS 6)
-  yum: name=http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/{{ ansible_distribution_version|int }}/{{ ansible_architecture }}/epel-release-6-8.noarch.rpm
+- name: setup epel repository (CentOS 7)
+  yum: name=http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
   tags: yum
 
 - name: check epel gpg pub key imported
@@ -9,8 +9,8 @@
   changed_when: False
   tags: yum
 
-- name: import epel key (CentOS 6)
-  command: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+- name: import epel key (CentOS 7)
+  command: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
   when: epel_imported.rc == 1
   tags: yum
 
@@ -23,7 +23,7 @@
   tags: yum
 
 - name: setup remi repo
-  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
   tags: yum
 
 - name: check fastestmirror.conf
@@ -33,6 +33,10 @@
   changed_when: False
   tags: yum
 
+- name: install Selinux bindings
+  yum: name=libselinux-python state=present
+  tags: yum
+
 - name: set fastestmirror filter
   lineinfile: >
     dest=/etc/yum/pluginconf.d/fastestmirror.conf
@@ -40,5 +44,5 @@
     regexp='^include_only'
     line='include_only=.jp'
     insertafter='#include_only'
-  when: ansible_distribution == 'CentOS' and ansible_distribution_version|int == 6
+  when: ansible_distribution == 'CentOS' and ansible_distribution_version|int == 7
   tags: yum

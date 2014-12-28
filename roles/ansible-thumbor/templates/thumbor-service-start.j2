@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$enabled" = "0" ] && [ "$force" != "1" ] ; then
+    echo 'Thumbor is disabled by /etc/default/thumbor, add force=1 to your service command' | systemd-cat -t Thumbor -p emerg
+    exit 0
+fi
+
+for p in `echo ${port} | tr ',' ' '`; do
+    nohup $DAEMON -c $conffile -i $ip -k $keyfile -p $p 2>/var/log/thumbor.log&
+done

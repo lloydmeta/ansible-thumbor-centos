@@ -1,0 +1,15 @@
+[Unit]
+Description=Thumbor service
+Before=
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+User={{thumbor_user}}
+CHDIR=/var/lib/thumbor
+EnvironmentFile=/etc/sysconfig/thumbor
+ExecStart=/usr/bin/start-thumbor-service
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
