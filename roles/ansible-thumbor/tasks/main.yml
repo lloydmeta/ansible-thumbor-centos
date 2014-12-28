@@ -36,6 +36,10 @@
     # - boost-devel
   tags: thumbor
 
+- name: upgrade pip for compatibility w/ git
+  command: pip install --upgrade pip
+  tags: thumbor
+
 - name: install pip dependencies
   pip: >
     name={{item}}
