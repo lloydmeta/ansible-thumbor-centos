@@ -30,7 +30,7 @@
     - libtiff-devel
     - freetype
     - freetype-devel
-    - policycoreutils-python
+    - policycoreutils-python # For SEManage
     # end - Thumbor is fairly useless without these
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
     # - GraphicsMagick-c++-devel
@@ -131,7 +131,7 @@
 - name: SELinux ports
   command: /usr/sbin/semanage port --add --type http_port_t --proto tcp {{ item }}
   with_items: thumbor_ports
-  ignore_errors: True
+  ignore_errors: True # Will fail if already added
   tags: thumbor
 
 - name: copy nginx config
