@@ -127,6 +127,12 @@
   notify: start thumbor
   tags: thumbor
 
+- name: SELinux ports
+  command: /usr/sbin/semanage port --add --type http_port_t --proto tcp {{ item }}
+  with_items: thumbor_ports
+  ignore_errors: True
+  tags: thumbor
+
 - name: copy nginx config
   template: >
     src=nginx-site.conf.j2
