@@ -30,6 +30,7 @@
     - libtiff-devel
     - freetype
     - freetype-devel
+    - policycoreutils-python
     # end - Thumbor is fairly useless without these
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
     # - GraphicsMagick-c++-devel
