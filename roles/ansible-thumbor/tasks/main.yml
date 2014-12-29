@@ -11,10 +11,12 @@
     group={{thumbor_group}}
   tags: thumbor
 
+- name: install the 'Development tools' package group
+  yum: name="@Development tools" state=present enablerepo=epel,remi disable_gpg_check=yes
+
 - name: install dependencies
   yum: name={{item}} state=installed enablerepo=epel,remi disable_gpg_check=yes
   with_items:
-    - gcc
     - git
     - python-pip
     - python-devel
@@ -33,8 +35,8 @@
     - policycoreutils-python # For SEManage
     # end - Thumbor is fairly useless without these
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
-    # - GraphicsMagick-c++-devel
-    # - boost-devel
+    - GraphicsMagick-c++-devel
+    - boost-devel
   tags: thumbor
 
 - name: upgrade pip for compatibility w/ git
@@ -51,9 +53,9 @@
     - python-dateutil
     - git+https://github.com/willtrking/thumbor_aws.git@{{ thumbor_aws_version }}#egg=thumbor_aws
     # GraphicsMagick deps disabled because https://github.com/thumbor/graphicsmagick-engine/issues/4
-    # - pgmagick
-    # - graphicsmagick-engine
-    # - numpy
+    - pgmagick
+    - graphicsmagick-engine
+    - numpy
   tags: thumbor
 
 - name: copy thumbor conf default
