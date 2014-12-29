@@ -3,10 +3,7 @@
   service: name=thumbor state=started enabled=yes
 
 - name: restart thumbor
-  command: "{{ item }}"
-  with_items:
-    - initctl stop thumbor
-    - initctl start thumbor
+  service: name=thumbor state=restarted enabled=yes
 
 - name: restart nginx
   service: name=nginx state=restarted enabled=yes
